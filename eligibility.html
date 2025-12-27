@@ -1,3 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Eligibility – Bahar Kaam</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+  background:#0b0b0b;
+  color:#ffffff;
+  font-family:Arial, Helvetica, sans-serif;
+  padding:20px;
+}
+h2{text-align:center;line-height:1.5;}
+.option{
+  background:#1a1a1a;
+  border:1px solid #333;
+  padding:16px;
+  margin:12px 0;
+  border-radius:8px;
+  text-align:center;
+  cursor:pointer;
+}
+small{color:#aaa;font-size:13px;}
+</style>
+</head>
+
+<body>
+
+<h2 id="question"></h2>
+<div id="options"></div>
+
 <script>
 let step = 0;
 
@@ -23,7 +55,7 @@ const flow = [
 function render(){
   if(step >= flow.length){
     document.body.innerHTML =
-      "<h2 style='text-align:center;color:white;'>"+
+      "<h2 style='text-align:center;'>"+
       "Aap basic eligible ho 👍<br>"+
       "మీరు ప్రాథమికంగా అర్హులు<br>"+
       "<small>You meet basic eligibility</small>"+
@@ -62,3 +94,6 @@ function next(val){
 
 render();
 </script>
+
+</body>
+</html>

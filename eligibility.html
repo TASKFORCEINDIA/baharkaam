@@ -1,88 +1,64 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Eligibility – Bahar Kaam</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body{background:#0b0b0b;color:#fff;font-family:Arial;padding:20px;}
-.step{text-align:center;color:#aaa;margin-bottom:10px;}
-h2{text-align:center;line-height:1.5;}
-.option{
-  background:#1a1a1a;
-  border:1px solid #333;
-  padding:16px;
-  margin:12px 0;
-  border-radius:8px;
-  text-align:center;
-  cursor:pointer;
-}
-small{color:#aaa;font-size:13px;}
-</style>
-</head>
-
-<body>
-<div class="step" id="stepText"></div>
-<h2 id="question"></h2>
-<div id="options"></div>
-
 <script>
-let step=1;
-const flow=[
-{
-q:`Aapki umar?<br>మీ వయసు ఎంత?<br><small>What is your age?</small>`,
-o:[["18–20","ok"],["21–30","ok"],["31–40","ok"],["41–45","ok"],["45+","stop"]]
-},
-{
-q:`Kya aapke paas valid passport hai?<br>మీకు చెల్లుబాటు అయ్యే పాస్‌పోర్ట్ ఉందా?<br><small>Do you have a valid passport?</small>`,
-o:[["Haan","ok"],["Nahi","passport"]]
-},
-{
-q:`Roz 8–10 ghante physical kaam kar sakte ho?<br>రోజూ 8–10 గంటలు పని చేయగలరా?<br><small>Can you do physical work?</small>`,
-o:[["Haan","ok"],["Nahi","stop"]]
-},
-{
-q:`Is job ke liye aapko apna flight ticket khud lena hoga.<br><br>Kya aap flight ticket ka kharcha afford kar sakte ho?<br><small>ఈ పనికి మీరు ఫ్లైట్ టికెట్ మీరే కొనాలి.<br>Can you afford the flight ticket?</small>`,
-o:[["Haan","ok"],["Nahi","stop"]]
-}
+let step = 0;
+
+const flow = [
+  {
+    q: "Aapki umar?<br>మీ వయసు ఎంత?<br><small>What is your age?</small>",
+    o: ["18–20","21–30","31–40","41–45","45+"]
+  },
+  {
+    q: "Kya aapke paas valid passport hai?<br>మీకు చెల్లుబాటు అయ్యే పాస్‌పోర్ట్ ఉందా?<br><small>Do you have a valid passport?</small>",
+    o: ["Haan","Nahi"]
+  },
+  {
+    q: "Roz 8–10 ghante physical kaam kar sakte ho?<br>రోజూ 8–10 గంటలు పని చేయగలరా?<br><small>Can you do physical work?</small>",
+    o: ["Haan","Nahi"]
+  },
+  {
+    q: "Is job ke liye aapko apna flight ticket khud lena hoga.<br><br>Kya aap flight ticket ka kharcha afford kar sakte ho?<br><small>ఈ పనికి మీరు ఫ్లైట్ టికెట్ మీరే కొనాలి.<br>Can you afford the flight ticket?</small>",
+    o: ["Haan","Nahi"]
+  }
 ];
 
 function render(){
-if(step>flow.length){
-document.body.innerHTML=`
-<h2 style="text-align:center;">
-Aap basic eligible ho 👍<br>
-మీరు ప్రాథమికంగా అర్హులు<br>
-<small>You meet basic eligibility</small>
-</h2>
-<a href="index.html" style="color:#f4c430;">Home</a>`;
-return;
-}
-document.getElementById("stepText").innerText=`Step ${step} of ${flow.length}`;
-document.getElementById("question").innerHTML=flow[step-1].q;
-let html="";
-flow[step-1].o.forEach(x=>{
-html+=`<div class="option" onclick="next('${x[1]}')">${x[0]}</div>`;
-});
-document.getElementById("options").innerHTML=html;
+  if(step >= flow.length){
+    document.body.innerHTML =
+      "<h2 style='text-align:center;color:white;'>"+
+      "Aap basic eligible ho 👍<br>"+
+      "మీరు ప్రాథమికంగా అర్హులు<br>"+
+      "<small>You meet basic eligibility</small>"+
+      "</h2><p style='text-align:center;'><a href='index.html' style='color:#f4c430;'>Home</a></p>";
+    return;
+  }
+
+  document.getElementById("question").innerHTML = flow[step].q;
+  let html = "";
+  flow[step].o.forEach(function(opt){
+    html += "<div class='option' onclick='next(\""+opt+"\")'>"+opt+"</div>";
+  });
+  document.getElementById("options").innerHTML = html;
 }
 
-function next(type){
-if(type==="stop"){
-alert("Abhi is job ke liye possible nahi.\nఇప్పుడు సాధ్యం కాదు.");
-return;
+function next(val){
+  if(step === 0 && val === "45+"){
+    alert("Abhi is job ke liye age limit zyada hai.");
+    return;
+  }
+  if(step === 1 && val === "Nahi"){
+    window.location = "passport-help.html";
+    return;
+  }
+  if(step === 2 && val === "Nahi"){
+    alert("Yeh kaam physical hai. Abhi possible nahi.");
+    return;
+  }
+  if(step === 3 && val === "Nahi"){
+    alert("Abhi ticket kharcha afford karna zaroori hai.");
+    return;
+  }
+  step++;
+  render();
 }
 
-if(type==="passport"){
-  window.location="passport-help.html";
-  return;
-}
-
-}
-step++;
-render();
-}
 render();
 </script>
-</body>
-</html>
